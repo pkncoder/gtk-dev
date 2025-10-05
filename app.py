@@ -10,6 +10,8 @@ class MyAppWindow(Gtk.ApplicationWindow):
 
     __gtype_name__ = "GithubSetup"
 
+    countButton = Gtk.Template.Child()
+
     @Gtk.Template.Callback()
     def count(self, button):
 
@@ -27,7 +29,7 @@ class MyAppWindow(Gtk.ApplicationWindow):
         except FileNotFoundError:
             output = f"Error: Command not found."
 
-        button.set_label(output)
+        self.countButton.set_label(output)
 
     @Gtk.Template.Callback()
     def wipe(self, button):
@@ -43,7 +45,7 @@ class MyAppWindow(Gtk.ApplicationWindow):
         except FileNotFoundError:
             print("Error: Command not found.")
 
-        button.set_label("Click Me")
+        self.countButton.set_label("0")
 
 class MyApp(Gtk.Application):
 
