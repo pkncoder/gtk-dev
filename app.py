@@ -5,17 +5,18 @@ import os
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk, Gio
 
-@Gtk.Template(filename = "appUI.ui")
+@Gtk.Template(filename = "ui.ui")
 class MyAppWindow(Gtk.ApplicationWindow):
 
     __gtype_name__ = "GithubSetup"
 
     @Gtk.Template.Callback()
-    def on_button_clicked(self, button):
+    def count(self, button):
 
         try:
             result = subprocess.run(
-                'echo "clicked" >> /home/kia/code/gtk-dev/lines.txt && cat /home/kia/code/gtk-dev/lines.txt | wc -l',
+                'printf "clicked\n" >> $HOME/code/gtk-dev/lines.txt && cat $HOME/code/gtk-dev/lines.txt | wc -l',
+                shell=True,
                 capture_output=True,
                 text=True,
                 check=True
@@ -28,7 +29,21 @@ class MyAppWindow(Gtk.ApplicationWindow):
 
         button.set_label(output)
 
-        print("Clicked!")
+    @Gtk.Template.Callback()
+    def wipe(self, button):
+        
+        try:
+            subprocess.run(
+                'printf "" > $HOME/code/gtk-dev/lines.txt',
+                shell=True,
+                check=True
+            )
+        except subprocess.CalledProcessError as e:
+            print(f"Error executing command: {e}")
+        except FileNotFoundError:
+            print("Error: Command not found.")
+
+        button.set_label("Click Me")
 
 class MyApp(Gtk.Application):
 
@@ -53,32 +68,3 @@ if __name__ == "__main__":
     app = MyApp()
     app.run(None)
 
-
-
-# import gi
-# gi.require_version("Gtk", "4.0")
-# from gi.repository import Gtk, GLib
-#
-# class MyApp(Gtk.Application):
-#     def __init__(self):
-#         super().__init__(application_id="com.example.MyApp",
-#                          flags=GLib.ApplicationFlags.FLAGS_NONE)
-#         self.builder = None
-#
-#     def do_activate(self):
-#         if not self.builder:
-#             self.builder = Gtk.Builder()
-#             self.builder.add_from_file("my_app.ui")
-#             self.builder.connect_signals(self)
-#
-#         window = self.builder.get_object("main_window")
-#         window.set_application(self)
-#         window.present()
-#
-#     def on_button_clicked(self, button):
-#         label = self.builder.get_object("my_label")
-#         label.set_label("Button clicked!")
-#
-# if __name__ == "__main__":
-#     app = MyApp()
-#     app.run(None)

@@ -19,9 +19,15 @@
           </object>
         </child>
         <child>
-          <object class="GtkButton" id="my_button">
+          <object class="GtkButton" id="countButton">
             <property name="label">Click Me</property>
-            <signal name="clicked" handler="on_button_clicked"/>
+            <signal name="clicked" handler="count"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="clearButton">
+            <property name="label">Click Me</property>
+            <signal name="clicked" handler="wipe" />
           </object>
         </child>
       </object>
