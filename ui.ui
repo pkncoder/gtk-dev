@@ -37,7 +37,7 @@
               <object class="GtkButton" id="countButton">
                 <property name="label">Click Me</property>
                 <property name="valign">center</property>
-                <signal name="clicked" handler="showModal"/>
+                <signal name="clicked" handler="get_git_username"/>
               </object>
             </child>
 

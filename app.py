@@ -1,12 +1,11 @@
 import gi
 import subprocess
-import os
 
 gi.require_version("Gtk", "4.0")
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk, Gio  # noqa
+
 
 def runCommand(command, capture_output=True, text=True, stdin=False):
-
     try:
         result = subprocess.run(
             command,
@@ -14,7 +13,7 @@ def runCommand(command, capture_output=True, text=True, stdin=False):
             capture_output=capture_output,
             text=text,
             check=True,
-            stdin=stdin
+            stdin=stdin,
         )
         output = result.stdout
 
@@ -22,26 +21,29 @@ def runCommand(command, capture_output=True, text=True, stdin=False):
         output = f"Error executing command: {e}"
 
     except FileNotFoundError:
-        output = f"Error: Command not found."
+        output = "Error: Command not found."
 
     return output
 
-@Gtk.Template(filename = "ui.ui")
-class MyAppWindow(Gtk.ApplicationWindow):
 
-    __gtype_name__ = "GithubSetup"
+class CommandModalWindow(Gtk.Dialog):
+    title = ""
+    text = ""
+    placeholder = ""
+    command = ""
 
-    content_box = Gtk.Template.Child()
-    countButton = Gtk.Template.Child()
+    def __init__(self, title, text, placeholder, command):
+        super().__init__()
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        self.title = title
+        self.text = text
+        self.placeholder = placeholder
+        self.command = command
 
-    @Gtk.Template.Callback()
-    def showModal(self, button):
+    def showModal(self):
         # Create dialog with proper transient parent
         dialog = Gtk.Dialog(
-            title="Enter Git Username",
+            title=self.title,
             transient_for=self,
             modal=True,
         )
@@ -65,7 +67,7 @@ class MyAppWindow(Gtk.ApplicationWindow):
             margin_top=16,
             margin_bottom=16,
             margin_start=16,
-            margin_end=16
+            margin_end=16,
         )
 
         # MessageDialog-style icon
@@ -75,12 +77,8 @@ class MyAppWindow(Gtk.ApplicationWindow):
 
         # Right side of dialog: label + entry field
         text_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
-        label = Gtk.Label(
-            label="Please enter your Git username:",
-            wrap=True,
-            xalign=0
-        )
-        entry = Gtk.Entry(placeholder_text="e.g. johndoe")
+        label = Gtk.Label(label=self.text, wrap=True, xalign=0)
+        entry = Gtk.Entry(placeholder_text=self.placeholder)
 
         text_box.append(label)
         text_box.append(entry)
@@ -96,39 +94,55 @@ class MyAppWindow(Gtk.ApplicationWindow):
         dialog.present()
 
     def on_dialog_ok(self, dialog, entry):
+        text = entry.get_text().strip()
 
-
-        username = entry.get_text().strip()
-
-        if username != "":
-            print("User entered:", username)
-            runCommand(f"git config --global user.name {username}")
+        if entry == "":
+            print("User entered nothing")
+        else:
+            runCommand(self.command.replace("{user_output}", text))
 
         dialog.destroy()
 
+
+@Gtk.Template(filename="ui.ui")
+class MyAppWindow(Gtk.ApplicationWindow):
+    __gtype_name__ = "GithubSetup"
+
+    content_box = Gtk.Template.Child()
+    countButton = Gtk.Template.Child()
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    @Gtk.Template.Callback()
+    def get_git_username(self, button):
+        CommandModalWindow(
+            "Username",
+            "Enter Git Username:",
+            "eg. johndoe",
+            "git config --global user.name {user_output}",
+        ).showModal()
+
     @Gtk.Template.Callback()
     def wipe(self, button):
-        
-        runCommand('printf "" > $HOME/code/gtk-dev/lines.txt', capture_output=False, text=False)
+        runCommand(
+            'printf "" > $HOME/code/gtk-dev/lines.txt', capture_output=False, text=False
+        )
 
         self.countButton.set_label("0")
 
     @Gtk.Template.Callback()
     def gitUsername(self, label):
-        
-        username = runCommand('git config --global user.name')
+        username = runCommand("git config --global user.name")
         label.set_label(username)
 
     @Gtk.Template.Callback()
     def gitEmail(self, label):
-        
-        email = runCommand('git config --global user.email')
+        email = runCommand("git config --global user.email")
         label.set_label(email)
 
 
-
 class MyApp(Gtk.Application):
-
     def __init__(self):
         super().__init__(
             application_id="com.pkncoder.githubsetup",
@@ -137,10 +151,10 @@ class MyApp(Gtk.Application):
         self.builder = None
 
     def do_activate(self):
-        window = MyAppWindow(application = self)
+        window = MyAppWindow(application=self)
         window.present()
+
 
 if __name__ == "__main__":
     app = MyApp()
     app.run(None)
-
