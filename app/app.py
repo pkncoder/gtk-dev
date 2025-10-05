@@ -50,11 +50,6 @@ class CommandModalWindow(Gtk.Dialog):
             margin_end=16,
         )
 
-        # MessageDialog-style icon
-        image = Gtk.Image.new_from_icon_name("dialog-information-symbolic")
-        image.set_pixel_size(48)
-        content_box.append(image)
-
         # Right side of dialog: label + entry field
         text_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
         label = Gtk.Label(label=self.text, wrap=True, xalign=0)
