@@ -1,29 +1,9 @@
 import gi
-import subprocess
+
+from helpers.helpers import runCommand
 
 gi.require_version("Gtk", "4.0")
-from gi.repository import Gtk, Gio  # noqa
-
-
-def runCommand(command, capture_output=True, text=True, stdin=False):
-    try:
-        result = subprocess.run(
-            command,
-            shell=True,
-            capture_output=capture_output,
-            text=text,
-            check=True,
-            stdin=stdin,
-        )
-        output = result.stdout
-
-    except subprocess.CalledProcessError as e:
-        output = f"Error executing command: {e}"
-
-    except FileNotFoundError:
-        output = "Error: Command not found."
-
-    return output
+from gi.repository import Gtk, Gio  # noqa # type: ignore
 
 
 class CommandModalWindow(Gtk.Dialog):
@@ -104,7 +84,7 @@ class CommandModalWindow(Gtk.Dialog):
         dialog.destroy()
 
 
-@Gtk.Template(filename="ui.ui")
+@Gtk.Template(filename="app/ui.ui")
 class MyAppWindow(Gtk.ApplicationWindow):
     __gtype_name__ = "GithubSetup"
 
@@ -124,12 +104,13 @@ class MyAppWindow(Gtk.ApplicationWindow):
         ).showModal()
 
     @Gtk.Template.Callback()
-    def wipe(self, button):
-        runCommand(
-            'printf "" > $HOME/code/gtk-dev/lines.txt', capture_output=False, text=False
-        )
-
-        self.countButton.set_label("0")
+    def get_git_email(self, button):
+        CommandModalWindow(
+            "Email",
+            "Enter Git Email:",
+            "eg. johndoe@gmail.com",
+            "git config --global user.email {user_output}",
+        ).showModal()
 
     @Gtk.Template.Callback()
     def gitUsername(self, label):
