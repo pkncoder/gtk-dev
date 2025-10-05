@@ -83,39 +83,47 @@ class CommandModalWindow(Gtk.Dialog):
 class MyAppWindow(Gtk.ApplicationWindow):
     __gtype_name__ = "GithubSetup"
 
-    content_box = Gtk.Template.Child()
-    countButton = Gtk.Template.Child()
+    # Entries
+    username = Gtk.Template.Child()
+    email = Gtk.Template.Child()
+
+    # Buttons
+    username_save_button = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    @Gtk.Template.Callback()
-    def get_git_username(self, button):
-        CommandModalWindow(
-            "Username",
-            "Enter Git Username:",
-            "eg. johndoe",
-            "git config --global user.name {user_output}",
-        ).showModal()
+        self.username_save_button.grab_focus()
+
+    # Fetch git global configs
 
     @Gtk.Template.Callback()
-    def get_git_email(self, button):
-        CommandModalWindow(
-            "Email",
-            "Enter Git Email:",
-            "eg. johndoe@gmail.com",
-            "git config --global user.email {user_output}",
-        ).showModal()
-
-    @Gtk.Template.Callback()
-    def gitUsername(self, label):
+    def fetch_git_username(self, entry):
         username = runCommand("git config --global user.name")
-        label.set_label(username)
+        entry.set_text(username.strip())
 
     @Gtk.Template.Callback()
-    def gitEmail(self, label):
+    def fetch_git_email(self, entry):
         email = runCommand("git config --global user.email")
-        label.set_label(email)
+        entry.set_text(email.strip())
+
+    # Save git global configs
+
+    @Gtk.Template.Callback()
+    def save_git_username(self, button):
+        runCommand(
+            f"git config --global user.name {self.username.get_text()}",
+            capture_output=False,
+            text=False,
+        )
+
+    @Gtk.Template.Callback()
+    def save_git_email(self, button):
+        runCommand(
+            f"git config --global user.email {self.email.get_text()}",
+            capture_output=False,
+            text=False,
+        )
 
 
 class MyApp(Gtk.Application):
@@ -128,6 +136,7 @@ class MyApp(Gtk.Application):
 
     def do_activate(self):
         window = MyAppWindow(application=self)
+        window.set_focus(None)
         window.present()
 
 
