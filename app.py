@@ -37,27 +37,34 @@ class MyAppWindow(Gtk.ApplicationWindow):
     def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
+        self.countButton.connect("clicked", self.showModal)
 
-        # Create a popover and attach it to the button
-        popover = Gtk.Popover()
-        popover.set_has_arrow(True)
+    def showModal(self, button):
+        # Create a modal dialog
+        dialog = Gtk.MessageDialog(
+            transient_for=self,
+            modal=True,
+            message_type=Gtk.MessageType.INFO,
+            buttons=Gtk.ButtonsType.OK_CANCEL,
+            text="Are you sure you want to continue?"
+        )
+        #
+        # box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        #
+        # # Get the content area and add content
+        # label = Gtk.Label(label="This is a modal dialog — like a Bootstrap modal!")
+        # label.set_margin_top(12)
+        # label.set_margin_bottom(12)
+        # box.append(label)
+        #
+        # # Add a close button
+        # close_button = Gtk.Button(label="Close")
+        # close_button.connect("clicked", lambda b: dialog.close())
+        # box.append(close_button)
+        #
+        # dialog.set_child(box)
 
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        box.set_margin_top(10)
-        box.set_margin_bottom(10)
-        box.set_margin_start(10)
-        box.set_margin_end(10)
-
-        box.append(Gtk.Label(label="Hello from Popover!"))
-        close_button = Gtk.Button(label="Close Popover", halign=Gtk.Align.CENTER)
-        close_button.connect("clicked", lambda b: popover.popdown())
-        box.append(close_button)
-
-        popover.set_child(box)
-        popover.set_parent(self.countButton)
-
-        # Connect signal to show the popover
-        self.countButton.connect("clicked", lambda btn: popover.popup())
+        response = dialog.present()
 
     @Gtk.Template.Callback()
     def count(self, button):
