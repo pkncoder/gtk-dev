@@ -6,30 +6,73 @@
     <property name="default-height">200</property>
     <child>
       <object class="GtkBox" id="content_box">
+
+
+
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <property name="margin-start">12</property>
         <property name="margin-end">12</property>
         <property name="margin-top">12</property>
         <property name="margin-bottom">12</property>
+
+
+
         <child>
-          <object class="GtkLabel" id="my_label">
-            <property name="label">Hello from the UI template!</property>
-            <property name="visible">True</property>
+          <object class="GtkBox" id="gitUsernameBox">
+
+            <property name="orientation">horizontal</property>
+            <property name="valign">center</property>
+            <property name="spacing">8</property>
+
+            <child>
+              <object class="GtkLabel" id="username">
+                <property name="label">Fetching git Global Username</property>
+                <property name="valign">center</property>
+                <signal name="realize" handler="gitUsername"/>
+              </object>
+            </child>
+
+            <child>
+              <object class="GtkButton" id="countButton">
+                <property name="label">Click Me</property>
+                <property name="valign">center</property>
+                <signal name="clicked" handler="count"/>
+              </object>
+            </child>
+
           </object>
         </child>
+
+
         <child>
-          <object class="GtkButton" id="countButton">
-            <property name="label">Click Me</property>
-            <signal name="clicked" handler="count"/>
+          <object class="GtkBox" id="gitEmailBox">
+
+            <property name="orientation">horizontal</property>
+            <property name="valign">center</property>
+            <property name="spacing">8</property>
+            
+            <child>
+              <object class="GtkLabel" id="email">
+                <property name="label">Fetching git Global Email</property>
+                <property name="valign">center</property>
+                <signal name="realize" handler="gitEmail"/>
+              </object>
+            </child>
+
+            <child>
+              <object class="GtkButton" id="clearButton">
+                <property name="label">Click Me</property>
+                <property name="valign">center</property>
+                <signal name="clicked" handler="wipe" />
+              </object>
+            </child>
+        
           </object>
         </child>
-        <child>
-          <object class="GtkButton" id="clearButton">
-            <property name="label">Click Me</property>
-            <signal name="clicked" handler="wipe" />
-          </object>
-        </child>
+
+
+
       </object>
     </child>
   </template>
