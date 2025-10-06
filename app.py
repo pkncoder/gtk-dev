@@ -35,43 +35,76 @@ class MyAppWindow(Gtk.ApplicationWindow):
     countButton = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
-
         super().__init__(**kwargs)
-        self.countButton.connect("clicked", self.showModal)
-
-    def showModal(self, button):
-        # Create a modal dialog
-        dialog = Gtk.MessageDialog(
-            transient_for=self,
-            modal=True,
-            message_type=Gtk.MessageType.INFO,
-            buttons=Gtk.ButtonsType.OK_CANCEL,
-            text="Are you sure you want to continue?"
-        )
-        #
-        # box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        #
-        # # Get the content area and add content
-        # label = Gtk.Label(label="This is a modal dialog — like a Bootstrap modal!")
-        # label.set_margin_top(12)
-        # label.set_margin_bottom(12)
-        # box.append(label)
-        #
-        # # Add a close button
-        # close_button = Gtk.Button(label="Close")
-        # close_button.connect("clicked", lambda b: dialog.close())
-        # box.append(close_button)
-        #
-        # dialog.set_child(box)
-
-        response = dialog.present()
 
     @Gtk.Template.Callback()
-    def count(self, button):
+    def showModal(self, button):
+        # Create dialog with proper transient parent
+        dialog = Gtk.Dialog(
+            title="Enter Git Username",
+            transient_for=self,
+            modal=True,
+        )
+        dialog.set_default_size(360, -1)
 
-        output = runCommand('printf "clicked\n" >> $HOME/code/gtk-dev/lines.txt && cat $HOME/code/gtk-dev/lines.txt | wc -l')
+        # --- Header bar (modern button placement) ---
+        headerbar = Gtk.HeaderBar()
+        headerbar.set_show_title_buttons(False)
+        dialog.set_titlebar(headerbar)
 
-        self.countButton.set_label(output)
+        cancel_button = Gtk.Button(label="Cancel")
+        ok_button = Gtk.Button(label="OK", css_classes=["suggested-action"])
+
+        headerbar.pack_start(cancel_button)
+        headerbar.pack_end(ok_button)
+
+        # --- Content area styled like Gtk.MessageDialog ---
+        content_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL,
+            spacing=12,
+            margin_top=16,
+            margin_bottom=16,
+            margin_start=16,
+            margin_end=16
+        )
+
+        # MessageDialog-style icon
+        image = Gtk.Image.new_from_icon_name("dialog-information-symbolic")
+        image.set_pixel_size(48)
+        content_box.append(image)
+
+        # Right side of dialog: label + entry field
+        text_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+        label = Gtk.Label(
+            label="Please enter your Git username:",
+            wrap=True,
+            xalign=0
+        )
+        entry = Gtk.Entry(placeholder_text="e.g. johndoe")
+
+        text_box.append(label)
+        text_box.append(entry)
+        content_box.append(text_box)
+
+        dialog.set_child(content_box)
+
+        # --- Signal connections ---
+        cancel_button.connect("clicked", lambda *_: dialog.destroy())
+        ok_button.connect("clicked", lambda *_: self.on_dialog_ok(dialog, entry))
+        entry.connect("activate", lambda *_: self.on_dialog_ok(dialog, entry))
+
+        dialog.present()
+
+    def on_dialog_ok(self, dialog, entry):
+
+
+        username = entry.get_text().strip()
+
+        if username != "":
+            print("User entered:", username)
+            runCommand(f"git config --global user.name {username}")
+
+        dialog.destroy()
 
     @Gtk.Template.Callback()
     def wipe(self, button):
