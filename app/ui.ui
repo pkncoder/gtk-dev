@@ -6,90 +6,81 @@
     <property name="default-height">200</property>
     <child>
       <object class="GtkBox" id="content_box">
-
-
-
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
-
         <child>
           <object class="GtkNotebook">
-
-
             <child>
               <object class="GtkBox">
-
                 <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <property name="vexpand">True</property>
-              
                 <child>
                   <object class="GtkBox" id="gitUsernameBox">
-
                     <property name="orientation">horizontal</property>
                     <property name="valign">center</property>
                     <property name="spacing">8</property>
-
                     <child>
                       <object class="GtkEntry" id="username">
                         <property name="text">Fetching git Global Username</property>
                         <property name="valign">center</property>
-                        <signal name="realize" handler="fetch_git_username"/>
+                        <signal handler="fetch_git_username" name="realize"></signal>
                       </object>
                     </child>
-
                     <child>
                       <object class="GtkButton" id="username_save_button">
                         <property name="label">Save</property>
                         <property name="valign">center</property>
-                        <signal name="clicked" handler="save_git_username"/>
+                        <signal handler="save_git_username" name="clicked"></signal>
                       </object>
                     </child>
-
                   </object>
                 </child>
-
                 <child>
-                    <object class="GtkBox" id="gitEmailBox">
-
-                      <property name="orientation">horizontal</property>
-                      <property name="valign">center</property>
-                      <property name="spacing">8</property>
-
-                      <child>
-                        <object class="GtkEntry" id="email">
-                          <property name="text">Fetching git Global Email</property>
-                          <property name="valign">center</property>
-                          <signal name="realize" handler="fetch_git_email"/>
-                        </object>
-                      </child>
-
-                      <child>
-                        <object class="GtkButton" id="clearButton">
-                          <property name="label">Save</property>
-                          <property name="valign">center</property>
-                          <signal name="clicked" handler="save_git_email" />
-                        </object>
-                      </child>
-
+                  <object class="GtkBox" id="gitEmailBox">
+                    <property name="orientation">horizontal</property>
+                    <property name="valign">center</property>
+                    <property name="spacing">8</property>
+                    <child>
+                      <object class="GtkEntry" id="email">
+                        <property name="text">Fetching git Global Email</property>
+                        <property name="valign">center</property>
+                        <signal handler="fetch_git_email" name="realize"></signal>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="clearButton">
+                        <property name="label">Save</property>
+                        <property name="valign">center</property>
+                        <signal handler="save_git_email" name="clicked"></signal>
+                      </object>
+                    </child>
                   </object>
                 </child>
-
               </object>
             </child>
-
-
             <child type="tab">
               <object class="GtkLabel">
                 <property name="label">Github Config</property>
               </object>
             </child>
-
+            <child>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">This is a label</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel">
+                <property name="label">Github SSH Key Testing</property>
+              </object>
+            </child>
           </object>
         </child>
-
       </object>
     </child>
   </template>
 </interface>
-
