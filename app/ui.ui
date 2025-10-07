@@ -78,6 +78,12 @@
                 <property name="margin-bottom">5</property>
                 <child>
                   <object class="GtkBox">
+                    <property name="spacing">8</property>
+                    <child>
+                      <object class="GtkLabel" id="github_connection_status">
+                        <property name="label">Click the "Test Github Connection"</property>
+                      </object>
+                    </child>
                     <child>
                       <object class="GtkButton">
                         <property name="label">Test Github Connection</property>

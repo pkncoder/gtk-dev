@@ -13,7 +13,7 @@ class MyAppWindow(Gtk.ApplicationWindow):
     # Entries
     username = Gtk.Template.Child()
     email = Gtk.Template.Child()
-    # passkey = Gtk.Template.Child()
+    github_connection_status = Gtk.Template.Child()
 
     # Buttons
     username_save_button = Gtk.Template.Child()
@@ -53,6 +53,7 @@ class MyAppWindow(Gtk.ApplicationWindow):
             text=False,
         )
 
+    # TODO: Fix the stalling issue
     @Gtk.Template.Callback()
     def test_git_connection(self, button):
         output = runCommand(
@@ -61,7 +62,9 @@ class MyAppWindow(Gtk.ApplicationWindow):
             check=False,
         )
 
-        print((output[1].find("You've successfully authenticated") != -1))
+        self.github_connection_status.set_text(
+            f"The status for Github Connection is: {output[1].find("You've successfully authenticated") != -1}"
+        )
 
 
 class MyApp(Gtk.Application):
