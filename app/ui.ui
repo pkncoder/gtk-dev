@@ -13,8 +13,12 @@
             <child>
               <object class="GtkBox">
                 <property name="orientation">vertical</property>
-                <property name="spacing">12</property>
                 <property name="vexpand">True</property>
+                <property name="spacing">12</property>
+                <property name="margin-top">5</property>
+                <property name="margin-start">5</property>
+                <property name="margin-end">5</property>
+                <property name="margin-bottom">5</property>
                 <child>
                   <object class="GtkBox" id="gitUsernameBox">
                     <property name="orientation">horizontal</property>
@@ -66,9 +70,20 @@
             </child>
             <child>
               <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="vexpand">True</property>
+                <property name="margin-top">5</property>
+                <property name="margin-start">5</property>
+                <property name="margin-end">5</property>
+                <property name="margin-bottom">5</property>
                 <child>
-                  <object class="GtkLabel">
-                    <property name="label">This is a label</property>
+                  <object class="GtkBox">
+                    <child>
+                      <object class="GtkButton">
+                        <property name="label">Test Github Connection</property>
+                        <signal handler="test_git_connection" name="clicked"></signal>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
