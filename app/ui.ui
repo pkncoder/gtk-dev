@@ -15,57 +15,69 @@
         <child>
           <object class="GtkNotebook">
 
+
             <child>
-              <object class="GtkBox" id="gitUsernameBox">
+              <object class="GtkBox">
 
-                <property name="orientation">horizontal</property>
-                <property name="valign">center</property>
-                <property name="spacing">8</property>
-
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
+                <property name="vexpand">True</property>
+              
                 <child>
-                  <object class="GtkEntry" id="username">
-                    <property name="text">Fetching git Global Username</property>
-                    <property name="valign">center</property>
-                    <signal name="realize" handler="fetch_git_username"/>
-                  </object>
-                </child>
-
-                <child>
-                  <object class="GtkButton" id="username_save_button">
-                    <property name="label">Save</property>
-                    <property name="valign">center</property>
-                    <signal name="clicked" handler="save_git_username"/>
-                  </object>
-                </child>
-
-                <child>
-                  <object class="GtkBox" id="gitEmailBox">
+                  <object class="GtkBox" id="gitUsernameBox">
 
                     <property name="orientation">horizontal</property>
                     <property name="valign">center</property>
                     <property name="spacing">8</property>
 
                     <child>
-                      <object class="GtkEntry" id="email">
-                        <property name="text">Fetching git Global Email</property>
+                      <object class="GtkEntry" id="username">
+                        <property name="text">Fetching git Global Username</property>
                         <property name="valign">center</property>
-                        <signal name="realize" handler="fetch_git_email"/>
+                        <signal name="realize" handler="fetch_git_username"/>
                       </object>
                     </child>
 
                     <child>
-                      <object class="GtkButton" id="clearButton">
+                      <object class="GtkButton" id="username_save_button">
                         <property name="label">Save</property>
                         <property name="valign">center</property>
-                        <signal name="clicked" handler="save_git_email" />
+                        <signal name="clicked" handler="save_git_username"/>
                       </object>
                     </child>
 
                   </object>
                 </child>
 
+                <child>
+                    <object class="GtkBox" id="gitEmailBox">
+
+                      <property name="orientation">horizontal</property>
+                      <property name="valign">center</property>
+                      <property name="spacing">8</property>
+
+                      <child>
+                        <object class="GtkEntry" id="email">
+                          <property name="text">Fetching git Global Email</property>
+                          <property name="valign">center</property>
+                          <signal name="realize" handler="fetch_git_email"/>
+                        </object>
+                      </child>
+
+                      <child>
+                        <object class="GtkButton" id="clearButton">
+                          <property name="label">Save</property>
+                          <property name="valign">center</property>
+                          <signal name="clicked" handler="save_git_email" />
+                        </object>
+                      </child>
+
+                  </object>
+                </child>
+
               </object>
             </child>
+
 
             <child type="tab">
               <object class="GtkLabel">
