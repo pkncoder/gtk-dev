@@ -2,9 +2,10 @@ import gi
 import subprocess
 
 gi.require_version("Gtk", "4.0")
-from gi.repository import Gtk, Gio  # noqa # type: ignore
+from gi.repository import Gtk  # noqa # type: ignore
 
 
+# TODO:Use Gio.HANDELS_COMMAND_LINE proporley
 def runCommand(
     command,
     shell=True,
