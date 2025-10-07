@@ -21,8 +21,6 @@ class MyAppWindow(Gtk.ApplicationWindow):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.username_save_button.grab_focus()
-
     # Fetch git global configs
 
     @Gtk.Template.Callback()
@@ -73,14 +71,8 @@ class MyApp(Gtk.Application):
             application_id="com.pkncoder.githubsetup",
             flags=Gio.ApplicationFlags.FLAGS_NONE,
         )
-        self.builder = None
 
     def do_activate(self):
         window = MyAppWindow(application=self)
         window.set_focus(None)
         window.present()
-
-
-if __name__ == "__main__":
-    app = MyApp()
-    app.run(None)
