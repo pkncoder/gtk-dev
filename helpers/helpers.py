@@ -7,11 +7,7 @@ from gi.repository import Gtk  # noqa # type: ignore
 
 # TODO:Use Gio.HANDELS_COMMAND_LINE proporley
 def runCommand(
-    command,
-    shell=True,
-    capture_output=True,
-    text=True,
-    check=True,
+    command, shell=True, capture_output=True, text=True, check=True, input=""
 ):
     try:
         result = subprocess.run(
@@ -20,6 +16,7 @@ def runCommand(
             capture_output=capture_output,
             text=text,
             check=check,
+            input=input,
         )
         output = [result.stdout, result.stderr, result.returncode]
 

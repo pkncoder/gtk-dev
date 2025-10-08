@@ -96,7 +96,62 @@
             </child>
             <child type="tab">
               <object class="GtkLabel">
-                <property name="label">Github SSH Key Testing</property>
+                <property name="label">Github Connection Testing</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="vexpand">True</property>
+                <property name="margin-top">5</property>
+                <property name="margin-start">5</property>
+                <property name="margin-end">5</property>
+                <property name="margin-bottom">5</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="spacing">8</property>
+                    <child>
+                      <object class="GtkLabel" id="ssh_keys">
+                        <property name="label">Fetching SSH Keys</property>
+                        <signal handler="fetch_ssh_keys" name="realize"></signal>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="spacing">8</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkEntry">
+                        <property name="placeholder-text">Email</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="label">Create SSH Key</property>
+                        <signal handler="create_ssh_key" name="clicked"></signal>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <child>
+                          <object class="GtkLabel" id="ssh_pub_key">
+                            <property name="label">Fetching SSH Key Info</property>
+                            <property name="wrap">True</property>
+                            <signal handler="fetch_pub_ssh_key" name="realize"></signal>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel">
+                <property name="label">SSH Keys</property>
               </object>
             </child>
           </object>
