@@ -32,14 +32,16 @@ def runCommand(
 class ModalWindow(Gtk.Dialog):
     title = ""
     text = ""
+    body = None
 
-    def __init__(self, title, text):
+    def __init__(self, title, text, body=None):
         super().__init__()
 
         self.title = title
         self.text = text
+        self.body = body
 
-    def showModal(self, parent):
+    def createDialogWindow(self, parent):
         # Create dialog with proper transient parent
         dialog = Gtk.Dialog(
             title=self.title,
@@ -58,6 +60,11 @@ class ModalWindow(Gtk.Dialog):
 
         headerbar.pack_start(cancel_button)
         headerbar.pack_end(ok_button)
+
+        return dialog, cancel_button, ok_button
+
+    def showModal(self, parent):
+        dialog, cancel_button, ok_button = self.createDialogWindow(parent)
 
         # --- Content area styled like Gtk.MessageDialog ---
         content_box = Gtk.Box(
@@ -73,10 +80,20 @@ class ModalWindow(Gtk.Dialog):
         text_box = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL, spacing=8, hexpand=True
         )
-        entry = Gtk.Entry()
-        entry.set_text(self.text)
+        label = Gtk.Label()
+        label.set_selectable(True)
+        label.set_text(self.text)
 
-        text_box.append(entry)
+        text_box.append(label)
+
+        if self.body is not None:
+            body = Gtk.Label()
+
+            body.set_wrap_mode(True)
+            body.set_text(self.body)
+
+            text_box.append(body)
+
         content_box.append(text_box)
 
         dialog.set_child(content_box)
@@ -84,45 +101,22 @@ class ModalWindow(Gtk.Dialog):
         # --- Signal connections ---
         cancel_button.connect("clicked", lambda *_: dialog.destroy())
         ok_button.connect("clicked", lambda *_: dialog.destroy())
-        entry.connect("activate", lambda *_: dialog.destroy())
 
         dialog.present()
 
 
-# TODO: Make this inherit ModalWindow for a better workflow
-class CommandModalWindow(Gtk.Dialog):
-    title = ""
-    text = ""
+class CommandModalWindow(ModalWindow):
     placeholder = ""
     command = ""
 
-    def __init__(self, title, text, placeholder, command):
-        super().__init__()
+    def __init__(self, title, text, placeholder, command, body=None):
+        super().__init__(title=title, text=text, body=body)
 
-        self.title = title
-        self.text = text
         self.placeholder = placeholder
         self.command = command
 
     def showModal(self, parent):
-        # Create dialog with proper transient parent
-        dialog = Gtk.Dialog(
-            title=self.title,
-            transient_for=parent,
-            modal=True,
-        )
-        dialog.set_default_size(360, -1)
-
-        # --- Header bar (modern button placement) ---
-        headerbar = Gtk.HeaderBar()
-        headerbar.set_show_title_buttons(False)
-        dialog.set_titlebar(headerbar)
-
-        cancel_button = Gtk.Button(label="Cancel")
-        ok_button = Gtk.Button(label="OK", css_classes=["suggested-action"])
-
-        headerbar.pack_start(cancel_button)
-        headerbar.pack_end(ok_button)
+        dialog, cancel_button, ok_button = self.createDialogWindow(parent)
 
         # --- Content area styled like Gtk.MessageDialog ---
         content_box = Gtk.Box(
