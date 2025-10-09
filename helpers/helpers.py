@@ -29,6 +29,7 @@ def runCommand(
     return output
 
 
+# TODO: Make floating
 class ModalWindow(Gtk.Dialog):
     title = ""
     text = ""
