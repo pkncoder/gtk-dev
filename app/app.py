@@ -1,6 +1,6 @@
 import gi
 
-from helpers.helpers import CommandModalWindow, ModalWindow, runCommand
+from helpers.helpers import ModalWindow, runCommand
 
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk, Gio  # noqa # type: ignore
@@ -90,7 +90,7 @@ class MyAppWindow(Gtk.ApplicationWindow):
     def view_ssh_pub_key(self, button):
         ssh_pub_key = self.fetch_pub_ssh_key()
         print(ssh_pub_key)
-        ModalWindow("SSH Pub Key", ssh_pub_key).showModal()
+        ModalWindow("SSH Pub Key", ssh_pub_key).showModal(self.get_root())
 
     def fetch_pub_ssh_key(self):
         return runCommand("cat /home/kia/.ssh/id_ed25519.pub")[0].strip()

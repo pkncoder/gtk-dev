@@ -29,7 +29,6 @@ def runCommand(
     return output
 
 
-# TODO: Make floating
 class ModalWindow(Gtk.Dialog):
     title = ""
     text = ""
@@ -40,11 +39,11 @@ class ModalWindow(Gtk.Dialog):
         self.title = title
         self.text = text
 
-    def showModal(self):
+    def showModal(self, parent):
         # Create dialog with proper transient parent
         dialog = Gtk.Dialog(
             title=self.title,
-            transient_for=self,
+            transient_for=parent,
             modal=True,
         )
         dialog.set_default_size(360, -1)
@@ -105,11 +104,11 @@ class CommandModalWindow(Gtk.Dialog):
         self.placeholder = placeholder
         self.command = command
 
-    def showModal(self):
+    def showModal(self, parent):
         # Create dialog with proper transient parent
         dialog = Gtk.Dialog(
             title=self.title,
-            transient_for=self,
+            transient_for=parent,
             modal=True,
         )
         dialog.set_default_size(360, -1)
