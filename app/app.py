@@ -1,6 +1,6 @@
 import gi
 
-from helpers.helpers import runCommand
+from helpers.helpers import CommandModalWindow, ModalWindow, runCommand
 
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk, Gio  # noqa # type: ignore
@@ -17,7 +17,6 @@ class MyAppWindow(Gtk.ApplicationWindow):
     # Labels
     github_connection_status = Gtk.Template.Child()
     ssh_keys = Gtk.Template.Child()
-    ssh_pub_key = Gtk.Template.Child()
 
     # Buttons
     username_save_button = Gtk.Template.Child()
@@ -87,13 +86,14 @@ class MyAppWindow(Gtk.ApplicationWindow):
 
         runCommand("ssh-add ~/.ssh/id_ed25519")
 
-        self.fetch_pub_ssh_key(self.ssh_pub_key)
-
     @Gtk.Template.Callback()
-    def fetch_pub_ssh_key(self, label):
-        pub_key = runCommand("cat ~/.ssh/id_ed25519.pub")[0]
+    def view_ssh_pub_key(self, button):
+        ssh_pub_key = self.fetch_pub_ssh_key()
+        print(ssh_pub_key)
+        ModalWindow("SSH Pub Key", ssh_pub_key).showModal()
 
-        self.ssh_pub_key.set_text(pub_key)
+    def fetch_pub_ssh_key(self):
+        return runCommand("cat /home/kia/.ssh/id_ed25519.pub")[0].strip()
 
 
 class MyApp(Gtk.Application):

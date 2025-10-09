@@ -135,14 +135,9 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkBox">
-                        <child>
-                          <object class="GtkLabel" id="ssh_pub_key">
-                            <property name="label">Fetching SSH Key Info</property>
-                            <property name="wrap">True</property>
-                            <signal handler="fetch_pub_ssh_key" name="realize"></signal>
-                          </object>
-                        </child>
+                      <object class="GtkButton" id="view_ssh_pub_key">
+                        <property name="label">View SSH Pub Key</property>
+                        <signal handler="view_ssh_pub_key" name="clicked"></signal>
                       </object>
                     </child>
                   </object>
