@@ -71,22 +71,25 @@ class MyAppWindow(Gtk.ApplicationWindow):
     # TODO: make this a selectable list
     @Gtk.Template.Callback()
     def fetch_ssh_keys(self, label):
-        output = runCommand("ls ~/.ssh/ | grep 'id_'", check=False)
+        output = runCommand("ls ~/.ssh/ | grep '.pub'", check=False)
 
         label.set_text(output[0].strip())
 
-    # TODO: Make some checks to see if it is needed to create a key (maybe make a different name for github)
     @Gtk.Template.Callback()
     def create_ssh_key(self, button):
-        print("faire")
+        if runCommand("ls ~/.ssh/ | grep 'github_write_key.pub'")[0].strip() == "":
+            ModalWindow("Error", "Key already exists").showModal(self.get_root())
+            return
 
         runCommand(
-            f"ssh-keygen -t ed25519 -C {self.email.get_text().strip()}", input="\n\n\n"
+            f"ssh-keygen -t ed25519 -C {self.email.get_text().strip()} -f ~/.ssh/github_write_key",
+            input="\n\n",
         )
 
-        runCommand('eval "$(ssh-agent -s)"')
+        if runCommand("pidof ssh-agent")[2] != 0:
+            runCommand('eval "$(ssh-agent -s)"')
 
-        runCommand("ssh-add ~/.ssh/id_ed25519")
+        runCommand("ssh-add ~/.ssh/github_write_key.pub")
 
         self.fetch_ssh_keys(self.ssh_keys)
 
@@ -102,7 +105,7 @@ class MyAppWindow(Gtk.ApplicationWindow):
         ).showModal(self.get_root())
 
     def fetch_pub_ssh_key(self):
-        return runCommand("cat /home/kia/.ssh/id_ed25519.pub")[0].strip()
+        return runCommand("cat /home/kia/.ssh/github_write_key.pub")[0].strip()
 
 
 class MyApp(Gtk.Application):
