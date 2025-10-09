@@ -77,7 +77,7 @@ class MyAppWindow(Gtk.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def create_ssh_key(self, button):
-        if runCommand("ls ~/.ssh/ | grep 'github_write_key.pub'")[0].strip() == "":
+        if runCommand("ls ~/.ssh/ | grep 'github_write_key.pub'")[0].strip() != "":
             ModalWindow("Error", "Key already exists").showModal(self.get_root())
             return
 
