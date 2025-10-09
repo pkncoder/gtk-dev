@@ -65,13 +65,13 @@ class MyAppWindow(Gtk.ApplicationWindow):
         )
 
         self.github_connection_status.set_text(
-            f"The status for Github Connection is: {output[1].find("You've successfully authenticated") != -1}"
+            f"The status for Github Connection is: {output[1].find("You've successfully authenticated") != -1 and output[1].find('Permission denied') == -1}"
         )
 
     # TODO: make this a selectable list
     @Gtk.Template.Callback()
     def fetch_ssh_keys(self, label):
-        output = runCommand("ls ~/.ssh/ | grep 'id_'")
+        output = runCommand("ls ~/.ssh/ | grep 'id_'", check=False)
 
         label.set_text(output[0].strip())
 
@@ -87,6 +87,8 @@ class MyAppWindow(Gtk.ApplicationWindow):
         runCommand('eval "$(ssh-agent -s)"')
 
         runCommand("ssh-add ~/.ssh/id_ed25519")
+
+        self.fetch_ssh_keys(self.ssh_keys)
 
     # TODO: Make this use a selected ssh key, instead of the default
     @Gtk.Template.Callback()
